@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Analytics Dashboard</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+body{
+background:linear-gradient(135deg,#020617,#0f172a,#1e3a8a);
+color:white;
+font-family:'Segoe UI',sans-serif;
+}
+
+.hero{
+text-align:center;
+padding:60px 20px;
+}
+
+/* FIXED TITLE COLOR */
+.hero h2{
+color:white;
+}
+
+.btn{
+margin-top:12px;
+background:linear-gradient(90deg,#36d1dc,#5b86e5);
+border:none;
+color:white;
+padding:10px 18px;
+border-radius:8px;
+cursor:pointer;
+}
+
+.feature-section{
+margin-top:70px;
+}
+
+.feature-grid{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:30px;
+}
+
+.feature-card{
+background:#0f172a;
+padding:25px;
+width:260px;
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
+
+select,input{
+padding:8px;
+border-radius:6px;
+border:none;
+margin:5px;
+width:90%;
+}
+
+.status{
+font-weight:bold;
+margin-top:5px;
+}
+
+.on-time{color:#22c55e;}
+.minor-delay{color:#facc15;}
+.major-delay{color:#ef4444;}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>✈ Flight Price Agent</h1>
+
+<nav>
+<a href="index.html">Home</a>
+<a href="search.html">Search Flights</a>
+<a href="dashboard.html">Analytics</a>
+<a href="login.html">Login</a>
+</nav>
+
+</header>
+
+
+<!-- FLIGHT PRICE RADAR -->
+
+<section class="hero">
+
+<h2>Flight Price Radar</h2>
+
+<button class="btn" onclick="checkPriceRadar()">Check Market Status</button>
+
+<div id="priceRadarResult" style="margin-top:20px;"></div>
+
+</section>
+
+
+<!-- ROUTE ACTIVITY MONITOR -->
+
+<section class="hero">
+
+<h2>Flight Route Activity Monitor</h2>
+
+<button class="btn" onclick="showRouteActivity()">Check Route Activity</button>
+
+<div id="routeActivityResult" style="margin-top:20px;"></div>
+
+</section>
+
+
+<!-- ✅ ADDED BOOKINGS SECTION (ONLY CHANGE) -->
+
+<section class="hero">
+
+<h2 style="color:white;">Manage Your Bookings</h2>
+
+<button class="btn" onclick="window.location.href='bookings.html'">
+Go to My Bookings
+</button>
+
+</section>
+
+
+<section class="feature-section">
+
+<h2 style="text-align:center">Advanced Analytics Tools</h2>
+
+<div class="feature-grid">
+
+<div class="feature-card">
+
+<h3>Cheapest Route Finder</h3>
+
+<select id="fromCity">
+<option>Bangalore</option>
+<option>Delhi</option>
+<option>Mumbai</option>
+</select>
+
+<select id="toCity">
+<option>Goa</option>
+<option>Dubai</option>
+<option>Singapore</option>
+<option>Bangkok</option>
+</select>
+
+<button class="btn" onclick="findRoute()">Find Cheapest</button>
+
+<p id="routeResult"></p>
+
+</div>
+
+
+<div class="feature-card">
+
+<h3>Price Drop Alert</h3>
+
+<button class="btn" onclick="priceDrop()">Check Price Drop</button>
+
+<p id="dropResult"></p>
+
+</div>
+
+
+<div class="feature-card">
+
+<h3>Travel Cost Calculator</h3>
+
+<input id="passengers" type="number" placeholder="Passengers">
+
+<button class="btn" onclick="calculateCost()">Calculate Cost</button>
+
+<p id="costResult"></p>
+
+</div>
+
+
+<div class="feature-card">
+
+<h3>Airline Performance</h3>
+
+<button class="btn" onclick="showRanking()">Show Ranking</button>
+
+<p id="rankingResult"></p>
+
+</div>
+
+
+<div class="feature-card">
+
+<h3>Flight Delay Tracker</h3>
+
+<select id="delayAirline">
+<option>Indigo</option>
+<option>Air India</option>
+<option>Vistara</option>
+</select>
+
+<button class="btn" onclick="checkDelay()">Check Status</button>
+
+<p id="delayResult"></p>
+
+</div>
+
+
+<div class="feature-card">
+
+<h3>Peak Booking Time</h3>
+
+<button class="btn" onclick="showPeak()">Show Peak Time</button>
+
+<p id="peakResult"></p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<script>
+
+/* FLIGHT PRICE RADAR */
+
+function checkPriceRadar(){
+
+let radar=[
+"Delhi → Dubai : 📈 Prices Rising",
+"Bangalore → Goa : 📉 Prices Dropping",
+"Mumbai → Singapore : ➖ Stable Prices"
+];
+
+document.getElementById("priceRadarResult").innerHTML=radar.join("<br>");
+
+}
+
+
+/* ROUTE ACTIVITY MONITOR */
+
+function showRouteActivity(){
+
+let activity=[
+"Delhi → Dubai : 🔴 Very Busy",
+"Bangalore → Goa : 🟡 Moderate Traffic",
+"Mumbai → Singapore : 🟢 Low Traffic"
+];
+
+document.getElementById("routeActivityResult").innerHTML=activity.join("<br>");
+
+}
+
+
+/* CHEAPEST ROUTE */
+
+function findRoute(){
+
+let from=document.getElementById("fromCity").value;
+let to=document.getElementById("toCity").value;
+
+let airlines=[
+"Indigo - ₹6200",
+"Vistara - ₹6400",
+"Air India - ₹6600"
+];
+
+document.getElementById("routeResult").innerHTML=
+"Cheapest options from "+from+" → "+to+":<br>"+airlines.join("<br>");
+
+}
+
+
+/* PRICE DROP */
+
+function priceDrop(){
+
+let from=document.getElementById("fromCity").value;
+let to=document.getElementById("toCity").value;
+
+let airlines=[
+{ name:"Indigo", price:6200 },
+{ name:"Vistara", price:6400 },
+{ name:"Air India", price:6600 }
+];
+
+let message="Price drop prediction for "+from+" → "+to+":<br>";
+
+airlines.forEach(a=>{
+
+let drop=Math.floor(Math.random()*500)+200;
+let newPrice=a.price-drop;
+
+message+=a.name+" may drop from ₹"+a.price+" to ₹"+newPrice+"<br>";
+
+});
+
+document.getElementById("dropResult").innerHTML=message;
+
+}
+
+
+/* COST CALCULATOR */
+
+function calculateCost(){
+
+let passengers=document.getElementById("passengers").value;
+
+let price=6000;
+
+let total=passengers*price;
+
+document.getElementById("costResult").innerText=
+"Estimated Cost: ₹"+total;
+
+}
+
+
+/* AIRLINE RANKING */
+
+function showRanking(){
+
+document.getElementById("rankingResult").innerText=
+"1. Indigo ⭐⭐⭐⭐⭐   2. Vistara ⭐⭐⭐⭐   3. Air India ⭐⭐⭐";
+
+}
+
+
+/* FLIGHT DELAY TRACKER */
+
+function checkDelay(){
+
+let airline=document.getElementById("delayAirline").value;
+
+let delays={
+
+"Indigo":{
+location:"Mumbai Airspace",
+reason:"Heavy Rainfall",
+eta:"7:45 PM",
+delay:"35 minutes",
+status:"major-delay",
+statusText:"🔴 Major Delay"
+},
+
+"Air India":{
+location:"Delhi Airport",
+reason:"Runway Congestion",
+eta:"6:30 PM",
+delay:"20 minutes",
+status:"minor-delay",
+statusText:"🟡 Minor Delay"
+},
+
+"Vistara":{
+location:"Arabian Sea Route",
+reason:"Air Traffic Control Delay",
+eta:"8:10 PM",
+delay:"0 minutes",
+status:"on-time",
+statusText:"🟢 On Time"
+}
+
+};
+
+let d=delays[airline];
+
+document.getElementById("delayResult").innerHTML=
+"<span class='status "+d.status+"'>"+d.statusText+"</span><br>"+
+"Current Location: "+d.location+"<br>"+
+"Reason: "+d.reason+"<br>"+
+"Estimated Arrival: "+d.eta+"<br>"+
+"Delay Duration: "+d.delay;
+
+}
+
+
+/* PEAK BOOKING TIME */
+
+function showPeak(){
+
+document.getElementById("peakResult").innerText=
+"Peak booking time: 6 PM – 9 PM";
+
+}
+
+</script>
+
+</body>
+
+</html>
+
+
+
+
+
+

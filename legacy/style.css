@@ -1,0 +1,263 @@
+```css
+/* ============================= */
+/* BODY */
+/* ============================= */
+
+body{
+margin:0;
+font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background:linear-gradient(135deg,#000000,#000000,#031547); /* DARK BLACK BACKGROUND */
+color:#ffffff;
+}
+
+
+/* ============================= */
+/* HEADER */
+/* ============================= */
+
+header{
+background:linear-gradient(90deg,#ff512f,#dd2476);
+color:white;
+padding:22px;
+text-align:center;
+box-shadow:0 6px 20px rgba(0,0,0,0.15);
+}
+
+header h1{
+margin:0;
+font-size:32px;
+}
+
+
+/* ============================= */
+/* NAVIGATION */
+/* ============================= */
+
+nav{
+margin-top:10px;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+margin:0 15px;
+font-weight:bold;
+transition:0.3s;
+}
+
+nav a:hover{
+color:#ffe066;
+}
+
+
+/* ============================= */
+/* HERO SECTION */
+/* ============================= */
+
+.hero{
+text-align:center;
+padding:50px 20px;
+}
+
+.hero h2{
+font-size:34px;
+margin-bottom:10px;
+color:#222;
+}
+
+.hero p{
+color:#d9d8d8;
+margin-bottom:35px;
+}
+
+
+/* ============================= */
+/* RESULTS */
+/* ============================= */
+
+.results{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:25px;
+margin-top:40px;
+}
+
+
+/* ============================= */
+/* FLIGHT CARDS */
+/* ============================= */
+
+.flight-card{
+background:linear-gradient(135deg,#ffffff,#f1f5ff);
+padding:24px;
+border-radius:16px;
+width:270px;
+box-shadow:0 12px 30px rgba(0,0,0,0.15);
+transition:0.3s;
+border-top:6px solid #ff512f;
+text-align:center;
+}
+
+.flight-card:hover{
+transform:translateY(-10px);
+box-shadow:0 20px 40px rgba(0,0,0,0.25);
+}
+
+.flight-card h3{
+margin-top:0;
+color:#ff512f;
+}
+
+
+/* ============================= */
+/* TEXT */
+/* ============================= */
+
+.flight-card p{
+margin:6px 0;
+font-size:15px;
+}
+
+
+/* ============================= */
+/* PRICE */
+/* ============================= */
+
+.price{
+font-size:24px;
+font-weight:bold;
+color:#16a34a;
+margin-top:10px;
+}
+
+
+/* ============================= */
+/* BUTTON */
+/* ============================= */
+
+.btn{
+margin-top:12px;
+background:linear-gradient(90deg,#36d1dc,#5b86e5);
+color:white;
+border:none;
+padding:11px 18px;
+border-radius:9px;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+}
+
+.btn:hover{
+transform:scale(1.07);
+background:linear-gradient(90deg,#5b86e5,#36d1dc);
+}
+
+
+/* ============================= */
+/* INPUT FIELDS */
+/* ============================= */
+
+input,select{
+padding:11px;
+border-radius:8px;
+border:1px solid #ddd;
+margin:8px;
+font-size:14px;
+}
+
+
+/* ============================= */
+/* FEATURES SECTION */
+/* ============================= */
+
+.features{
+display:flex;
+flex-direction:column;
+gap:25px;
+max-width:700px;
+margin:40px auto;
+padding:0 20px;
+}
+
+.features p{
+background:#ffffff;
+padding:15px 20px;
+border-radius:8px;
+box-shadow:0 3px 8px rgba(0,0,0,0.1);
+}
+
+
+/* ============================= */
+/* STATS SECTION */
+/* ============================= */
+
+.stats{
+display:flex;
+justify-content:center;
+gap:100px;
+margin-top:40px;
+flex-wrap:wrap;
+}
+
+.stat-box{
+text-align:center;
+}
+
+.stat-box h2{
+font-size:32px;
+margin-bottom:5px;
+}
+
+
+/* ============================= */
+/* FOOTER */
+/* ============================= */
+
+footer{
+text-align:center;
+padding:22px;
+background:linear-gradient(90deg,#141e30,#243b55);
+color:white;
+margin-top:60px;
+}
+
+
+/* ============================= */
+/* RESPONSIVE */
+/* ============================= */
+
+@media(max-width:768px){
+
+.results{
+flex-direction:column;
+align-items:center;
+}
+
+.flight-card{
+width:90%;
+}
+
+}
+```
+
+.analytics{
+margin-top:80px;
+text-align:center;
+padding-bottom:60px;
+}
+
+.analytics-grid{
+display:flex;
+justify-content:center;
+gap:30px;
+flex-wrap:wrap;
+margin-bottom:40px;
+}
+
+#priceChart{
+max-width:700px;
+height:350px !important;
+margin:auto;
+display:block;
+}

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>My Bookings</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+
+<style>
+
+body{
+background:linear-gradient(135deg,#020617,#0f172a,#1e3a8a);
+color:white;
+font-family:'Segoe UI',sans-serif;
+margin:0;
+}
+
+.hero{
+text-align:center;
+padding:60px 20px;
+}
+
+.results{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:30px;
+margin-top:40px;
+}
+
+.ticket{
+background:#0f172a;
+width:340px;
+border-radius:14px;
+padding:25px;
+box-shadow:0 12px 30px rgba(0,0,0,0.5);
+border-top:5px solid #ff5733;
+}
+
+.ticket h3{
+color:#ff5733;
+margin-top:0;
+}
+
+.ticket p{
+margin:6px 0;
+}
+
+.price{
+font-size:22px;
+color:#38bdf8;
+}
+
+.btn{
+margin-top:10px;
+background:linear-gradient(90deg,#36d1dc,#5b86e5);
+border:none;
+color:white;
+padding:8px 18px;
+border-radius:6px;
+cursor:pointer;
+}
+
+/* STATUS */
+.status{
+padding:4px 10px;
+border-radius:10px;
+font-size:12px;
+}
+
+.ontime{ background:#00c853; }
+.boarding{ background:#ffab00; color:black; }
+.delayed{ background:#d50000; }
+
+.passenger-form{
+background:#0f172a;
+padding:25px;
+border-radius:12px;
+width:350px;
+margin:auto;
+margin-top:30px;
+box-shadow:0 10px 30px rgba(0,0,0,0.5);
+}
+
+.passenger-form input,
+.passenger-form select{
+width:100%;
+padding:8px;
+margin-top:5px;
+margin-bottom:15px;
+border-radius:6px;
+border:none;
+}
+
+.boarding-pass{
+background:white;
+color:black;
+padding:20px;
+border-radius:10px;
+width:400px;
+margin:auto;
+margin-top:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>✈ Flight Price Agent</h1>
+
+<nav>
+<a href="index.html">Home</a>
+<a href="search.html">Search Flights</a>
+<a href="dashboard.html">Analytics</a>
+<a href="deals.html">Deals</a>
+<a href="bookings.html">My Bookings</a>
+<a href="login.html">Login</a>
+</nav>
+
+</header>
+
+<section class="hero">
+
+<h2>My Flight Tickets</h2>
+
+<button class="btn" onclick="clearBookings()">Clear All Bookings</button>
+
+<!-- ✅ ADDED BUTTON -->
+<button class="btn" onclick="window.location.href='booking_insights.html'">
+📊 View Insights
+</button>
+
+<div class="results" id="results"></div>
+
+</section>
+
+<div id="formContainer"></div>
+<div id="boardingContainer"></div>
+
+<script>
+
+let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+let results = document.getElementById("results");
+
+if(bookings.length===0){
+results.innerHTML="<h3>No bookings yet.</h3>";
+}
+
+bookings.forEach((flight,index)=>{
+
+let seat=Math.floor(Math.random()*40)+1;
+let seatLetter=["A","B","C","D"][Math.floor(Math.random()*4)];
+
+let gate="A"+Math.floor(Math.random()*20);
+let terminal="T"+Math.floor(Math.random()*3+1);
+
+let boardingTime="09:"+Math.floor(Math.random()*50);
+let ticketId="FP"+Math.floor(Math.random()*100000);
+
+/* STATUS */
+let statuses=["ontime","boarding","delayed"];
+let statusText=["On Time","Boarding","Delayed"];
+let sIndex=Math.floor(Math.random()*3);
+
+let timerId="timer"+index;
+
+results.innerHTML+=`
+
+<div class="ticket">
+
+<h3>✈ ${flight.airline}</h3>
+
+<p>Status: <span class="status ${statuses[sIndex]}">${statusText[sIndex]}</span></p>
+<p id="${timerId}">Boarding in: --</p>
+
+<p><strong>Route:</strong> ${flight.route}</p>
+<p><strong>Departure:</strong> ${flight.time}</p>
+<p><strong>Seat:</strong> ${seat}${seatLetter}</p>
+<p><strong>Gate:</strong> ${gate}</p>
+<p><strong>Terminal:</strong> ${terminal}</p>
+<p><strong>Boarding Time:</strong> ${boardingTime}</p>
+
+<p class="price">${flight.price}</p>
+
+<button class="btn" onclick="rebookFlight()">Rebook</button>
+
+<button class="btn"
+onclick="openPassengerForm('${flight.airline}','${flight.route}','${flight.time}','${seat}${seatLetter}','${gate}','${terminal}','${boardingTime}','${ticketId}','${flight.price}')">
+Generate Boarding Pass
+</button>
+
+<br>
+
+<button class="btn" onclick="cancelBooking(${index})">
+Cancel Booking
+</button>
+
+</div>
+
+`;
+
+startTimer(timerId, Math.floor(Math.random()*60)+20);
+
+});
+
+
+function startTimer(id, minutes){
+let time = minutes*60;
+
+setInterval(()=>{
+let hrs=Math.floor(time/3600);
+let mins=Math.floor((time%3600)/60);
+let secs=time%60;
+
+let el=document.getElementById(id);
+if(el){
+el.innerText=`Boarding in: ${hrs}h ${mins}m ${secs}s`;
+}
+
+if(time>0) time--;
+},1000);
+}
+
+function rebookFlight(){
+window.location.href="search.html";
+}
+
+function cancelBooking(index){
+let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+bookings.splice(index,1);
+localStorage.setItem("bookings",JSON.stringify(bookings));
+location.reload();
+}
+
+function clearBookings(){
+localStorage.removeItem("bookings");
+location.reload();
+}
+
+/* EXISTING CODE */
+
+function openPassengerForm(airline,route,time,seat,gate,terminal,boarding,ticket,price){
+
+document.getElementById("formContainer").innerHTML=`
+
+<div class="passenger-form">
+
+<h3>Enter Passenger Details</h3>
+
+<label>Name</label>
+<input id="pname" placeholder="Passenger Name">
+
+<label>Passport / ID</label>
+<input id="pid" placeholder="Passport or ID">
+
+<label>Seat Preference</label>
+<select id="seatpref">
+<option>Window</option>
+<option>Aisle</option>
+<option>Middle</option>
+</select>
+
+<button class="btn"
+onclick="generateBoardingPass('${airline}','${route}','${time}','${seat}','${gate}','${terminal}','${boarding}','${ticket}','${price}')">
+Confirm Passenger
+</button>
+
+</div>
+
+`;
+
+window.scrollTo(0,document.body.scrollHeight);
+}
+
+
+function generateBoardingPass(airline,route,time,seat,gate,terminal,boarding,ticket,price){
+
+let name=document.getElementById("pname").value;
+let id=document.getElementById("pid").value;
+
+document.getElementById("boardingContainer").innerHTML=`
+
+<div class="boarding-pass">
+
+<h2>✈ Boarding Pass</h2>
+
+<p><strong>Passenger:</strong> ${name}</p>
+<p><strong>ID:</strong> ${id}</p>
+<p><strong>Airline:</strong> ${airline}</p>
+<p><strong>Route:</strong> ${route}</p>
+<p><strong>Seat:</strong> ${seat}</p>
+<p><strong>Gate:</strong> ${gate}</p>
+<p><strong>Terminal:</strong> ${terminal}</p>
+<p><strong>Boarding:</strong> ${boarding}</p>
+<p><strong>Departure:</strong> ${time}</p>
+<p><strong>Ticket ID:</strong> ${ticket}</p>
+<p><strong>Price:</strong> ${price}</p>
+
+</div>
+
+`;
+
+window.scrollTo(0,document.body.scrollHeight);
+}
+
+</script>
+
+</body>
+</html>

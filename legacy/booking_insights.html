@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Booking Insights</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+/* MATCH YOUR PROJECT THEME */
+
+body{
+background:linear-gradient(135deg,#020617,#0f172a,#1e3a8a);
+color:white;
+font-family:'Segoe UI',sans-serif;
+}
+
+h1{
+text-align:center;
+margin-top:30px;
+}
+
+/* SAME CARD STYLE */
+.flight-card{
+background:#0f172a;
+border-radius:14px;
+padding:25px;
+width:250px;
+box-shadow:0 10px 25px rgba(0,0,0,0.4);
+transition:0.3s;
+text-align:center;
+}
+
+.flight-card:hover{
+transform:translateY(-8px);
+}
+
+.container{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:30px;
+margin-top:30px;
+}
+
+/* BUTTON SAME AS YOUR PROJECT */
+.btn{
+margin-top:10px;
+background:linear-gradient(90deg,#36d1dc,#5b86e5);
+border:none;
+color:white;
+padding:10px 16px;
+border-radius:8px;
+cursor:pointer;
+}
+
+/* FILTER */
+.filter{
+text-align:center;
+margin-top:20px;
+}
+
+select{
+padding:10px;
+border-radius:8px;
+}
+
+/* CHART */
+canvas{
+max-width:700px;
+margin:40px auto;
+display:block;
+}
+
+.highlight{
+border:2px solid #22c55e;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h1>✈ Booking Insights</h1>
+</header>
+
+<div class="filter">
+<select id="filter" onchange="filterBookings()">
+<option value="all">All Airlines</option>
+<option value="Indigo">Indigo</option>
+<option value="Air India">Air India</option>
+<option value="Vistara">Vistara</option>
+</select>
+</div>
+
+<div class="container">
+
+<div class="flight-card">
+<h3>Total Bookings</h3>
+<h2 id="totalBookings">0</h2>
+</div>
+
+<div class="flight-card">
+<h3>Total Spent</h3>
+<h2 id="totalSpent">₹0</h2>
+</div>
+
+<div class="flight-card" id="topAirlineCard">
+<h3>Top Airline</h3>
+<h2 id="topAirline">-</h2>
+</div>
+
+<div class="flight-card">
+<h3>Favorite Route</h3>
+<h2 id="topRoute">-</h2>
+</div>
+
+</div>
+
+<canvas id="chart"></canvas>
+
+<div style="text-align:center;">
+<button class="btn" onclick="goBack()">⬅ Back to Bookings</button>
+</div>
+
+<script>
+
+let bookings = [
+{ airline: "Indigo", route: "Delhi-Goa", price: 4500 },
+{ airline: "Indigo", route: "Delhi-Goa", price: 4500 },
+{ airline: "Air India", route: "Mumbai-Chennai", price: 5200 },
+{ airline: "Vistara", route: "Mumbai-Singapore", price: 7200 }
+];
+
+let chart;
+
+function calculate(data){
+
+document.getElementById("totalBookings").innerText = data.length;
+
+let total = data.reduce((sum,b)=>sum+b.price,0);
+document.getElementById("totalSpent").innerText = "₹"+total;
+
+let airlineCount = {};
+let routeCount = {};
+
+data.forEach(b=>{
+airlineCount[b.airline]=(airlineCount[b.airline]||0)+1;
+routeCount[b.route]=(routeCount[b.route]||0)+1;
+});
+
+let topAirline = Object.keys(airlineCount).reduce((a,b)=>
+airlineCount[a]>airlineCount[b]?a:b);
+
+let topRoute = Object.keys(routeCount).reduce((a,b)=>
+routeCount[a]>routeCount[b]?a:b);
+
+document.getElementById("topAirline").innerText = topAirline;
+document.getElementById("topRoute").innerText = topRoute;
+
+document.getElementById("topAirlineCard").classList.add("highlight");
+
+if(chart) chart.destroy();
+
+let ctx = document.getElementById("chart").getContext("2d");
+
+chart = new Chart(ctx,{
+type:"bar",
+data:{
+labels:Object.keys(airlineCount),
+datasets:[{
+label:"Bookings",
+data:Object.values(airlineCount),
+backgroundColor:"#38bdf8"
+}]
+}
+});
+
+}
+
+function filterBookings(){
+let value=document.getElementById("filter").value;
+
+if(value==="all"){
+calculate(bookings);
+}else{
+let filtered=bookings.filter(b=>b.airline===value);
+calculate(filtered);
+}
+}
+
+function goBack(){
+window.location.href="bookings.html";
+}
+
+calculate(bookings);
+
+</script>
+
+</body>
+
+</html>
